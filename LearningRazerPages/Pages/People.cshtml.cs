@@ -36,6 +36,8 @@ public class PeopleModel(AppDbContext db) : PageModel
 
 	private const int PageSize = 5;
 
+	public PaginationModel Pagination { get; private set; } = new();
+
 
 	public Task OnGetAsync() => LoadPeopleAsync();
 	private async Task LoadPeopleAsync()
@@ -66,7 +68,22 @@ public class PeopleModel(AppDbContext db) : PageModel
 		//	.Skip((PageNumber - 1) * PageSize)
 		//	.Take(PageSize)
 		//	.ToListAsync();
+		Pagination = new PaginationModel
+		{
+			CurrentPage = PageNumber,
+			TotalPages = TotalPages,
+			TotalCount = TotalCount,
+			PageName = "/People",
 
+			RouteValues = new Dictionary<string, string?>
+			{
+				["Search"] = Search,
+				["MinAge"] = MinAge?.ToString(),
+				["MaxAge"] = MaxAge?.ToString(),
+				["SortBy"] = SortBy,
+				["Descending"] = Descending.ToString().ToLowerInvariant()
+			}
+		};
 		query = (SortBy?.ToLowerInvariant(), Descending) switch
 		{
 			("firstname", false) => query.OrderBy(x => x.FirstName).ThenBy(x => x.Id),
@@ -84,6 +101,8 @@ public class PeopleModel(AppDbContext db) : PageModel
 			.Skip((PageNumber - 1) * PageSize)
 			.Take(PageSize)
 			.ToListAsync();
+
+
 
 	}
 

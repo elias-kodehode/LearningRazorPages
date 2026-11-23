@@ -1,0 +1,43 @@
+﻿@model LearningRazerPages.Models.PaginationModel
+
+
+@{
+	var previousRoute = new Dictionary<string, string?>(Model.RouteValues)
+	{
+		["PageNumber"] = (Model.CurrentPage -1).ToString()	
+	};
+
+	var nextRoute = new Dictionary<string, string?>(Model.RouteValues)
+	{
+		["PageNumber"] = (Model.CurrentPage + 1).ToString()
+	};
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+	<span class="text-muted">
+		@Model.TotalCount results not found
+	</span>
+
+	<div class="d-flex gap-2 align-items-center">
+		@if(Model.HasPreviousPage)
+		{
+			<a 
+				asp-page="@Model.PageName"
+				asp-all-route-data="previousRoute"
+				class="btn btn-outline-primary"
+			>Previous</a>
+		}
+		<span>
+			Page @Model.CurrentPage of @Model.TotalPages
+		</span>
+
+		@if(Model.HasNextPage)
+		{
+			<a asp-page="@Model.PageName"
+			   asp-all-route-data="nextRoute"
+			   class="btn btn-outline-primary">
+				Next
+			</a>
+		}
+	</div>
+</div>
