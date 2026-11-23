@@ -11,6 +11,50 @@
 	</div>
 }
 
+
+
+<form method="get" asp-page="/People" class="mb-4">
+	<div class="row g-3">
+		<div class="col-md-6">
+			<label asp-for="Search" class="form-label">
+				Search by name
+			</label>
+
+			<input asp-for="Search"
+				   class="form-control"
+				   placeholder="Search people..." />
+		</div>
+
+		<div class="col-md-3">
+			<label asp-for="MinAge" class="form-label">
+				Minimum age
+			</label>
+
+			<input asp-for="MinAge"
+				   class="form-control" />
+		</div>
+
+		<div class="col-md-3">
+			<label asp-for="MaxAge" class="form-label">
+				Maximum age
+			</label>
+
+			<input asp-for="MaxAge"
+				   class="form-control" />
+		</div>
+	</div>
+
+	<div class="mt-3 d-flex gap-2">
+		<button type="submit" class="btn btn-primary">
+			Search
+		</button>
+
+		<a asp-page="/People" class="btn btn-secondary">
+			Clear
+		</a>
+	</div>
+</form>
+
 <table class="table">
 	<thead>
 		<tr>
@@ -43,6 +87,49 @@
 		}
 	</tbody>
 </table>
+
+
+
+<div class="d-flex justify-content-between
+	align-items-center mt-3">
+
+	<span class="text-muted">
+		@Model.TotalCount people found
+	</span>
+
+	<div class="d-flex gap-2 align-items-center">
+
+		@if(Model.PageNumber > 1)
+		{
+			<a asp-page="/People"
+			   asp-route-Search="@Model.Search"
+			   asp-route-MinAge="@Model.MinAge"
+			   asp-route-MaxAge="@Model.MaxAge"
+			   asp-route-PageNumber="@(Model.PageNumber - 1)"
+			   class="btn btn-outline-primary">
+				Previous
+			</a>
+		}
+
+		<span>
+			Page @Model.PageNumber of @Model.TotalPages
+		</span>
+
+		@if(Model.PageNumber < Model.TotalPages)
+		{
+			<a asp-page="/People"
+			   asp-route-Search="@Model.Search"
+			   asp-route-MinAge="@Model.MinAge"
+			   asp-route-MaxAge="@Model.MaxAge"
+			   asp-route-PageNumber="@(Model.PageNumber + 1)"
+			   class="btn btn-outline-primary">
+				Next
+			</a>
+		}
+
+	</div>
+</div>
+
 
 
 <h3 style="margin: 5px;">Add Person</h3>
