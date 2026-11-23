@@ -1,0 +1,67 @@
+﻿@page
+@model LearningRazerPages.Pages.PeopleModel
+
+<h2>People</h2>
+
+
+@if(TempData["Success"] is string message)
+{
+	<div class="alert alert-success">
+		@message
+	</div>
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Age</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var p in this.Model.People)
+		{
+			<tr>
+				<td>@p.Id</td>
+				<td>@p.FirstName</td>
+				<td>@p.LastName</td>
+				<td>@p.Age</td>
+				<td>
+					<a asp-page="/people/edit" asp-route-id="@p.Id" class="btn btn-primary">Edit</a>
+				</td>
+				<td>
+					<form method="post" asp-page-handler="Delete" asp-route-id="@p.Id" onsubmit="return confirm('Are you sure you want to delete this person?');"> 
+
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+<h3 style="margin: 5px;">Add Person</h3>
+<form method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<div>
+		<label asp-for="NewPerson.FirstName"></label>
+		<input asp-for="NewPerson.FirstName" class="form-control"/>
+		<span asp-validation-for="NewPerson.FirstName" class="text-danger"></span>
+	</div>
+	<div>
+		<label asp-for="NewPerson.LastName"></label>
+		<input asp-for="NewPerson.LastName" class="form-control" />
+		<span asp-validation-for="NewPerson.LastName" class="text-danger"></span>
+	</div>
+	<div>
+		<label asp-for="NewPerson.Age"></label>
+		<input asp-for="NewPerson.Age" class="form-control" />
+		<span asp-validation-for="NewPerson.Age" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-primary" style="margin-top: 5px;">Add Person</button>
+</form>

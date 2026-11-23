@@ -1,0 +1,21 @@
+﻿@page "/people/{id:int}"
+@model LearningRazerPages.Pages.People.EditModel
+
+
+<form method="post" id="editForm">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<partial name="_PersonForm" for="Input"/>
+
+
+</form>
+
+
+<div class="d-flex gap-2 mt-3">
+	<button type="submit" form="editForm" class="btn btn-primary">Save</button>
+	<a asp-page="/People" class="btn btn-secondary">Cancel</a>
+	<form method="post"
+		  asp-page-handler="Delete" onsubmit="return confirm('Are you sure?');">
+		<button class="btn btn-danger">Delete</button>
+	</form>
+</div>
