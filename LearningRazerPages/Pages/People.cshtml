@@ -59,9 +59,40 @@
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Age</th>
+			<th>
+				<a asp-page="/People"
+				   asp-route-Search="@Model.Search"
+				   asp-route-MinAge="@Model.MinAge"
+				   asp-route-MaxAge="@Model.MaxAge"
+				   asp-route-SortBy="firstname"
+				   asp-route-Descending="@(Model.SortBy == "firstname" ? !Model.Descending : false)"
+				   asp-route-PageNumber="1"
+				>
+					First Name
+				</a>
+			</th>
+			<th>
+				<a asp-page="/People"
+				   asp-route-Search="@Model.Search"
+				   asp-route-MinAge="@Model.MinAge"
+				   asp-route-MaxAge="@Model.MaxAge"
+				   asp-route-SortBy="lastname"
+				   asp-route-Descending="@(Model.SortBy == "lastname" ? !Model.Descending : false)" 
+				   asp-route-PageNumber="1">
+					Last Name
+				</a>
+			</th>
+			<th>
+				<a asp-page="/People"
+				   asp-route-Search="@Model.Search"
+				   asp-route-MinAge="@Model.MinAge"
+				   asp-route-MaxAge="@Model.MaxAge"
+				   asp-route-SortBy="age"
+				   asp-route-Descending="@(Model.SortBy == "age" ? !Model.Descending : false)" 
+				   asp-route-PageNumber="1">
+					Age
+				</a>
+			</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -75,7 +106,7 @@
 				<td>@p.LastName</td>
 				<td>@p.Age</td>
 				<td>
-					<a asp-page="/people/edit" asp-route-id="@p.Id" class="btn btn-primary">Edit</a>
+					<a asp-page="/People/Edit" asp-route-id="@p.Id" class="btn btn-primary">Edit</a>
 				</td>
 				<td>
 					<form method="post" asp-page-handler="Delete" asp-route-id="@p.Id" onsubmit="return confirm('Are you sure you want to delete this person?');"> 
@@ -106,6 +137,8 @@
 			   asp-route-MinAge="@Model.MinAge"
 			   asp-route-MaxAge="@Model.MaxAge"
 			   asp-route-PageNumber="@(Model.PageNumber - 1)"
+			   asp-route-SortBy="@Model.SortBy"
+			   asp-route-Descending="@Model.Descending"
 			   class="btn btn-outline-primary">
 				Previous
 			</a>
@@ -122,6 +155,8 @@
 			   asp-route-MinAge="@Model.MinAge"
 			   asp-route-MaxAge="@Model.MaxAge"
 			   asp-route-PageNumber="@(Model.PageNumber + 1)"
+			   asp-route-SortBy="@Model.SortBy"
+			   asp-route-Descending="@Model.Descending"
 			   class="btn btn-outline-primary">
 				Next
 			</a>

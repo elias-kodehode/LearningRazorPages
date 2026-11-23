@@ -25,6 +25,12 @@ public class PeopleModel(AppDbContext db) : PageModel
 	[BindProperty(SupportsGet = true)]
 	public int PageNumber { get; set; } = 1;
 
+	[BindProperty(SupportsGet = true)]
+	public string? SortBy { get; set; } = "firstName";
+
+	[BindProperty(SupportsGet = true)]
+	public bool Descending { get; set; }
+
 	public int TotalPages { get; private set; }
 	public int TotalCount { get; private set; }
 
@@ -56,10 +62,29 @@ public class PeopleModel(AppDbContext db) : PageModel
 
 		PageNumber = Math.Clamp(PageNumber, 1, TotalPages);
 
-		this.People = await query.OrderBy(x => x.Id)
+		//this.People = await query.OrderBy(x => x.Id)
+		//	.Skip((PageNumber - 1) * PageSize)
+		//	.Take(PageSize)
+		//	.ToListAsync();
+
+		query = (SortBy?.ToLowerInvariant(), Descending) switch
+		{
+			("firstname", false) => query.OrderBy(x => x.FirstName).ThenBy(x => x.Id),
+			("firstname", true) => query.OrderByDescending(x => x.FirstName).ThenBy(x => x.Id),
+
+			("lastname", false) => query.OrderBy(x => x.LastName).ThenBy(x => x.Id),
+			("lastname", true) => query.OrderByDescending(x => x.LastName).ThenBy(x => x.Id),
+
+			("age", false) => query.OrderBy(x => x.Age).ThenBy(x => x.Id),
+			("age", true) => query.OrderByDescending(x => x.Age).ThenBy(x => x.Id),
+			_ => query.OrderBy(x => x.Id)
+		};
+
+		this.People = await query
 			.Skip((PageNumber - 1) * PageSize)
 			.Take(PageSize)
 			.ToListAsync();
+
 	}
 
 	public async Task<IActionResult> OnPostAsync()
